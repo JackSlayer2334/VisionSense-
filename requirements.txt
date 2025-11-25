@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+onnxruntime
+opencv-python-headless
+numpy
+easyocr
+pyttsx3
+gTTS
+python-multipart
+openai
