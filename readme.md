@@ -1,216 +1,168 @@
-<h1 align="center">🔮 VisionSense+ Real-Time Multimodal AI Assistance for the Visually Impaired</h1> <p align="center"> <img src="https://img.shields.io/badge/AI-Computer Vision-blue?style=for-the-badge"> <img src="https://img.shields.io/badge/LLM-Scene Understanding-purple?style=for-the-badge"> <img src="https://img.shields.io/badge/Tech-FastAPI-green?style=for-the-badge"> <img src="https://img.shields.io/badge/Model-YOLOv8-orange?style=for-the-badge"> </p>
-🚀 Overview
+🔮 VisionSense+
+AI-Powered Multimodal Assistance for the Visually Impaired
 
-VisionSense+ is a real-time AI system designed to assist visually impaired users using:
+Author: Ayushman Yadav
 
-🧠 Multimodal AI
+<p align="center"> <img src="https://img.shields.io/badge/Author-Ayushman%20Yadav-blue?style=for-the-badge"> <img src="https://img.shields.io/badge/AI-Computer%20Vision-purple?style=for-the-badge"> <img src="https://img.shields.io/badge/LLM-Scene%20Understanding-green?style=for-the-badge"> <img src="https://img.shields.io/badge/Model-YOLOv8-orange?style=for-the-badge"> <img src="https://img.shields.io/badge/API-FastAPI-yellow?style=for-the-badge"> </p>
+🧠 Overview
+
+VisionSense+ is an intelligent multimodal AI system designed to help visually impaired users understand their surroundings in real-time. It combines:
 
 YOLOv8 ONNX for object detection
 
-EasyOCR for reading text
+EasyOCR for reading text in the environment
 
-LLM (OpenAI or fallback offline) for scene explanation
+GPT-powered LLM for natural-language scene explanation
 
-TTS (Text-to-Speech) for audio guidance
+TTS (Text-to-Speech) for audio feedback
 
-The goal is simple:
+This project demonstrates end-to-end AI engineering, making it ideal for:
 
-Help blind users understand their surroundings through AI-powered audio descriptions.
+ML Engineer internships
 
-This is a production-ready ML engineering portfolio project demonstrating:
+AI/Computer Vision roles
 
-Computer Vision
+Full-stack ML system building
 
-LLM integration
-
-Real-time inference
-
-API engineering
-
-End-to-end AI system design
+College major/minor projects
 
 ✨ Features
-🔍 Real-Time Object Detection
+🔍 Object Detection (real-time)
 
-Detects:
+Using YOLOv8 (converted to ONNX), VisionSense+ can detect:
 
-People, cars, bikes
+People
 
-Stairs, chairs, obstacles
+Cars, bikes, traffic lights
 
-Traffic lights
+Animals
 
-Animals & more
+Chairs, furniture
 
-📝 OCR Text Reading
+Obstacles & more (80 COCO classes)
 
-Reads:
+📝 OCR (EasyOCR)
 
-Signs
+Reads environmental text:
 
-Bus numbers
+Signboards
 
-Menus
+Navigation boards
+
+Shop names
+
+Instructions
 
 Documents
 
-📢 Audio Scene Description
+🧠 Scene Analysis (LLM)
 
-AI generates:
+An LLM combines detected objects + text and generates a helpful, safe, and human-like explanation.
 
-A short natural scene summary
+Example output:
 
-Safety warning
+“A person is standing 2 meters ahead. A car is approaching from the right. The signboard reads ‘Metro Station Gate A’.”
 
-Object overview
+🔊 Audio Output (TTS)
 
-🌐 FastAPI Backend
-
-Clean, modular API:
-
-/analyze → upload image → returns detections + text + AI description
-
-🎧 Optional TTS Support
-
-Direct audio feedback for blind users.
+Scene explanation is spoken aloud for blind users.
 
 🏗️ Project Structure
-vision-sense/
+VisionSense-/
 │── api/
 │ ├── main.py # FastAPI app
 │ ├── detection.py # YOLOv8 ONNX inference
-│ ├── ocr.py # EasyOCR wrapper
-│ ├── llm.py # LLM scene explanation
-│ ├── tts.py # Text-to-speech
-│ ├── utils.py # Preprocessing & NMS
+│ ├── ocr.py # Text detection
+│ ├── llm.py # Scene explanation (GPT or fallback)
+│ ├── tts.py # Text-to-Speech engine
+│ ├── utils.py # Preprocessing, NMS, scaling
 │ └── config.py # Settings
 │
 ├── models/
-│ └── yolov8.onnx # (required) ONNX model file
+│ └── yolov8.onnx # (ignored in git)
 │
-├── samples/ # Sample images to test
+├── samples/ # Test images
 ├── requirements.txt
 ├── README.md
 └── ...
 
 ⚙️ Installation
-1️⃣ Clone the repository
-git clone https://github.com/<your-username>/vision-sense.git
-cd vision-sense
+1️⃣ Clone the repo
+git clone https://github.com/JackSlayer2334/VisionSense-.git
+cd VisionSense-
 
-2️⃣ Create a virtual environment
+2️⃣ Create virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
 
 3️⃣ Install dependencies
 pip install -r requirements.txt
 
-4️⃣ Get YOLOv8 ONNX model
+4️⃣ Download YOLO model
 pip install ultralytics
-yolo export model=yolov8n.pt format=onnx imgsz=640
+yolo predict model=yolov8n.pt source=None
+cp ~/.config/Ultralytics/yolov8n.pt models/
 
-Move the file:
+5️⃣ Export to ONNX (compatible opset)
+yolo export model=models/yolov8n.pt format=onnx opset=12 imgsz=640
+mv yolov8n.onnx models/yolov8.onnx
 
-yolov8n.onnx → models/yolov8.onnx
-
-🏃 Run the Server
+🚀 Run the Server
 uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 
-Open docs:
+Visit API interface:
 
 http://localhost:8000/docs
 
-🧪 Test the API
-
-Place image:
-
-samples/test.jpg
-
-Then test:
-
+🧪 Test With an Image
 curl -X POST "http://localhost:8000/analyze" \
  -F "file=@samples/test.jpg"
 
-Example Output:
+📸 Screenshots / Demo (Add later)
 
-{
-"detections": {
-"boxes": [...],
-"scores": [...],
-"labels": ["person", "car"]
-},
-"text": ["Metro Station Entrance"],
-"description": "A person is near the entrance. A car is approaching from the right."
-}
+Object Detection Output
 
-📸 Screenshots (add when ready)
-[ ] object detection output  
-[ ] OCR output  
-[ ] FastAPI docs screenshot
+OCR Output
 
-🧠 How It Works (Architecture)
-Camera → Preprocessing → YOLOv8 ONNX → OCR → LLM → Audio/TTS → Blind User
+Scene Explanation Output
 
-YOLO detects objects
+API documentation screenshot
 
-OCR extracts readable text
-
-LLM combines everything into a description
-
-TTS speaks it aloud
-
-📦 Roadmap
+🧩 Roadmap
 
 Real-time video streaming
 
-Edge-device support (Raspberry Pi)
+Mobile app (React Native)
 
-Offline small LLM (Llama 3.1 3B)
+Raspberry Pi support
 
-React Native mobile app
+Offline small-LLM mode
 
-Navigation assistance (GPS-based)
+Cloud deployment (Railway/Render/AWS)
 
 🧑‍💻 Skills Demonstrated
 
 This project showcases:
 
-Computer Vision (ONNX Runtime, preprocessing)
+Computer Vision (YOLOv8, ONNX Runtime)
 
-Multimodal ML pipelines
+NLP + LLM integration
 
-Real-time inference optimization
+FastAPI backend engineering
 
-FastAPI backend design
+Real-time inference pipeline
 
-LLM prompt engineering
+Modular ML system design
 
-API architecture
+Git & best practices
 
-TTS integration
+Clean architecture and scalability
 
-Model deployment workflow
+👨‍💻 Author
 
-Perfect for:
-
-ML Engineer
-
-Computer Vision Engineer
-
-AI/ML Intern
-
-AI Research Assistant
+Ayushman Yadav
+AI/ML Developer | Computer Vision | Backend | Data Structures
 
 📝 License
 
-MIT License
-
-❤️ Acknowledgements
-
-Ultralytics YOLO
-
-EasyOCR
-
-OpenAI GPT Models
-
-FastAPI
+This project is released under the MIT License.
