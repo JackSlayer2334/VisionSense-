@@ -1,12 +1,9 @@
 import easyocr
-import cv2
-from .config import OCR_LANGS
 
 class OCR:
     def __init__(self):
-        self.reader = easyocr.Reader(OCR_LANGS.split(","))
+        self.reader = easyocr.Reader(['en'], gpu=False)
 
-    def read_text(self, image):
-        result = self.reader.readtext(image)
-        texts = [r[1] for r in result]
-        return texts
+    def read_text(self, img):
+        results = self.reader.readtext(img)
+        return [text for _, text, conf in results if conf > 0.4]
